@@ -1,21 +1,11 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+import os
+from pymongo import MongoClient
 
-from .models import Base
+# MONGODB_URL = "mongodb://seu_usuario:senha@seu_servidor_mongodb:porta"
+MONGODB_URL = "mongodb://mongouser:mongopassword@mongodb:27017/"
 
-DATABASE_URL = "postgresql://postgres:postgres@db:5432/dafiti"
+mongo_client = MongoClient(MONGODB_URL)
 
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
-def create_tables():
-    Base.metadata.create_all(bind=engine)
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+def get_mongo_db():
+    db = mongo_client.raizen_weather_db
+    return db

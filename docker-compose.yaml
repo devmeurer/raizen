@@ -1,23 +1,28 @@
 version: '3.8'
 services:
-  db:
-    image: postgres
-    container_name: dafiti_db
+  mongodb:
+    image: mongo
+    container_name: raizen_mongodb
     environment:
-      - POSTGRES_DB=dafiti
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - MONGO_INITDB_ROOT_USERNAME=mongouser
+      - MONGO_INITDB_ROOT_PASSWORD=mongopassword
     ports:
-      - "5434:5432"
-  dafiti:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  raizen:
     build:
       context: .
       dockerfile: Dockerfile
     working_dir: /code
-    container_name: dafiti_container
+    container_name: raizen_container
     volumes:
       - .:/code
     ports:
       - '8000:8000'
     depends_on:
-      - db
+      - mongodb
+
+volumes:
+  mongodb_data:
